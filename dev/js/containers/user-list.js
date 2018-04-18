@@ -1,14 +1,20 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import { connect } from 'react-redux';
-
+import {selectUser} from '../actions';
 
 class UserList extends Component{
-createListItems(){
-    console.log(this.props.users)
+renderList(){
+    //console.log(this.props.users)
     return this.props.users.map((user)=>{
       return(
-        <li key={user.id}>{user.first} {user.last}</li>
+        <li
+           key={user.id}
+           onClick={()=>this.props.selectUser(user)}
+           >
+           {user.first}
+           {user.last}
+        </li>
       );
     });
   }
@@ -16,7 +22,10 @@ createListItems(){
   render(){
     return(
       <ul>
-        {this.createListItems}
+
+
+        {this.renderList()}
+
       </ul>
     );
   }
@@ -27,4 +36,7 @@ function mapStateToProps(state){
     users: state.users
   }
 }
-export default connect(mapStateToProps)(UserList);
+function matchDispatchToProps(dispatch){
+  return bindActionCreators({selectUser:selectUser},dispatch)
+}
+export default connect(mapStateToProps,matchDispatchToProps)(UserList);
